@@ -3,17 +3,20 @@ import urllib3
 import sys
 
 # Limpa os avisos de certificado https não verificado
+# Disables insecure HTTPS certificate warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def brute(url, wordlist):
     
     # Isso engana o servidor para ele achar que somos um navegador comum e não um script
+    # Tricks the server into thinking this is a standard browser, not a script
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
     for word in wordlist:
         word = word.strip()
         
         # Pula linhas vazias na wordlist para evitar erros
+        # Skips blank lines to avoid malformed URLs
         if not word:
             continue
 
@@ -35,6 +38,7 @@ def brute(url, wordlist):
             sys.exit()
         except Exception as e:
             # Se der erro de conexão (timeout), apenas ignora e tenta o próximo
+            # Ignores connection errors (timeout) and tries the next word
             pass
 
 if __name__ == "__main__":
@@ -51,4 +55,5 @@ if __name__ == "__main__":
     except FileNotFoundError:
         print(f"\n[!] ERRO: O arquivo '{wordlist_name}' não foi encontrado.")
     except Exception as e:
+
         print(f"\n[!] Ocorreu um erro inesperado: {e}")
